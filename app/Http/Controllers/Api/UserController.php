@@ -40,12 +40,12 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:customers',
-            'phone' => 'required|string|min:10|unique:customers,phone',
-            'address' => 'required|string|max:255',
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required','string','email','max:255','unique:customers'],
+            'phone' => ['required','string' , 'regex:^(98|97)\d{8}$^', 'unique:customers,phone'],
+            'address' => ['required','string','max:255'],
             'status' => 'required',
-            'password' => 'required|string|min:8',
+            'password' => ['required','string','min:8'],
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -74,10 +74,15 @@ class UserController extends Controller
      */
     public function show(Customer $user)
     {
-        // return new CostumerResource($customer);
+        $customer = Customer::where('id', $user->id)->first();
+        if ($customer->count() == 0) {
+            return response()->json([
+                'message' => 'Customer not found',
+            ], 404);
+        }
     return response()->json([
         'message' => 'Customer found',
-        'customer' => new CostumerResource($user),
+        'customer' => new CostumerResource($customer),
     ], 200);
     }
 
@@ -86,22 +91,71 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $customer = Customer::find($id);
+        if (!$customer) {
+            return response()->json([
+                'message' => 'Customer not found',
+            ], 404);
+        }
+        return response()->json([
+            'message' => 'Customer found',
+            'customer' => new CostumerResource($customer),
+        ], 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $user)
     {
-        //
+        $validator = Validator::make($request->all(),[
+
+            'name' => ['required','string','max:255'],
+            'email'=>['required','string','email','max:255','unique:customers,email,'.$user],
+            'phone'=>['required','string','regex:^(98|97)\d{8}$^','unique:customers,phone,'.$user],
+            'address'=>['required','string','max:255'],
+            'status'=>'required',
+            'password'=>['required','string','min:8'],
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'message'=>'Validation failed',
+                'errors'=>$validator->errors(),
+            ],422);
+        }
+        $customer = Customer::find($user);
+        if (!$customer) {
+            return response()->json([
+                'message' => 'Customer not found',
+            ], 404);
+        }
+        $customer->name = $request->name;
+        $customer->email = $request->email;
+        $customer->phone = $request->phone;
+        $customer->address = $request->address;
+        $customer->status = $request->status;
+        $customer->password = bcrypt($request->password);
+        $customer->update();
+        return response()->json([
+            'message' => 'Customer updated successfully',
+            'customer' => new CostumerResource($customer),
+        ], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $user)
     {
-        //
+        $customer = Customer::find($user);
+        if(!$customer){
+            return response()->json([
+                'message' => "Customer not found",
+            ], 404);
+        }
+        $customer->delete();
+        return response()->json([
+            'message'=> 'Customer deleted successfully',
+        ]);
     }
 }
