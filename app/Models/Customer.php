@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Customer extends Model
 {
@@ -15,22 +16,20 @@ class Customer extends Model
         'status',
         'password',
     ];
-    /**
-     * Get the futsal that owns the Customer
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function futsal(): BelongsTo
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+    protected function casts(): array
     {
-        return $this->belongsTo(Futsal::class);
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
-    /**
-     * Get the reservation that owns the Customer
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function reservation(): BelongsTo
-    {
-        return $this->belongsTo(Reservation::class);
-    }
+
+   public function reservations(): HasMany
+   {
+       return $this->hasMany(Reservation::class);
+   }
 }

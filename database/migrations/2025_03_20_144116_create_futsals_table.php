@@ -21,11 +21,9 @@ return new class extends Migration
             $table->string('password');
             $table->integer('rate')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('inactive');
-            $table->enum('vacant_status', ['vacant', 'full'])->default('vacant');
             $table->longText('description')->nullable();
             $table->string('facilities')->nullable();
-            $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('reservation_id')->constrained()->cascadeOnDelete();
+
             $table->timestamps();
         });
     }

@@ -11,12 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('admins', function (Blueprint $table) {
+        Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->string('email');
-            $table->string('password');
+            $table->date('date');
+            $table->integer('amount');
+            $table->enum('payment_type', ['Cash', 'Online'])->default('Cash');
+            $table->enum('status', ['Pending', 'Confirmed', 'Cancelled'])->default('Pending');
+            $table->string('payment_screenshot')->nullable();
+            $table->string('reservation_code');
             $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
             $table->foreignId('futsal_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('timeslot_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -26,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('admins');
+        Schema::dropIfExists('reservations');
     }
 };

@@ -19,8 +19,6 @@ class Futsal extends Model
         'vacant_status',
         'description',
         'facilities',
-        'reservation_id',
-        'customer_id',
     ];
     /**
      * Get all of the reservations for the Futsal
@@ -36,8 +34,14 @@ class Futsal extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function customers(): HasMany
+    /**
+     * Get all of the timeslots for the Futsal
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function timeslots(): HasMany
     {
-        return $this->hasMany(Customer::class);
+        return $this->hasMany(Timeslot::class);
     }
+
 }

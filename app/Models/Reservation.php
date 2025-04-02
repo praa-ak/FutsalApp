@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Reservation extends Model
 {
@@ -17,18 +19,24 @@ class Reservation extends Model
         'reservation_code',
         'customer_id',
         'futsal_id',
+        'timeslot_id',
     ];
-    public function customers(): HasMany
+    public function customer(): BelongsTo
     {
-        return $this->hasMany(Customer::class);
+        return $this->belongsTo(Customer::class);
     }
     /**
      * Get all of the futsals for the Reservation
      *
      * @return \Illuminate\DatFutsalloquent\Relations\HasMany
      */
-    public function futsals(): HasMany
+    /**
+     * Get the futsal that owns the Reservation
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function futsal(): BelongsTo
     {
-        return $this->hasMany(Futsal::class);
+        return $this->belongsTo(Futsal::class);
     }
 }

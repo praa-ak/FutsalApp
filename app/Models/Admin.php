@@ -12,6 +12,7 @@ class Admin extends Model
         'password',
         'customer_id',
         'futsal_id',
+        'reservation_id',
     ];
     /**
      * Get all of the comments for the Admin
@@ -30,5 +31,9 @@ class Admin extends Model
     public function futsals(): HasMany
     {
         return $this->hasMany(Futsal::class);
+    }
+    public function reservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class);
     }
 }

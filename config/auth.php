@@ -40,6 +40,14 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'futsal' => [
+            'driver' => 'session',
+            'provider' => 'futsals',
+        ],
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
     ],
 
     /*
@@ -62,8 +70,17 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => env('AUTH_MODEL', App\Models\Customer::class),
         ],
+        'futsals' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL_FUTSAL', App\Models\Futsal::class),
+        ],
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL_ADMIN', App\Models\Admin::class),
+        ],
+
 
         // 'users' => [
         //     'driver' => 'database',
