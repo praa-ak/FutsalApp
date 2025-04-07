@@ -14,15 +14,13 @@ return new class extends Migration
         Schema::create('futsals', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email');
             $table->string('phone');
             $table->string('address');
             $table->string('image');
-            $table->string('password');
             $table->integer('rate')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('inactive');
             $table->longText('description')->nullable();
-            $table->string('facilities')->nullable();
+            $table->mediumText('facilities')->nullable();
 
             $table->timestamps();
         });

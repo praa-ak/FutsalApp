@@ -19,7 +19,7 @@ return new class extends Migration
             $table->enum('status', ['Pending', 'Confirmed', 'Cancelled'])->default('Pending');
             $table->string('payment_screenshot')->nullable();
             $table->string('reservation_code');
-            $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('futsal_id')->constrained()->cascadeOnDelete();
             $table->foreignId('timeslot_id')->constrained()->cascadeOnDelete();
             $table->timestamps();

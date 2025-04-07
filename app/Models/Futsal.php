@@ -13,10 +13,8 @@ class Futsal extends Model
         'phone',
         'address',
         'status',
-        'password',
         'image',
         'rate',
-        'vacant_status',
         'description',
         'facilities',
     ];

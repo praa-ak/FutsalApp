@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CostumerResource;
+use App\Http\Resources\UserResource;
 use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,13 +17,16 @@ class UserController extends Controller
      */
     public function index()
     {
-        $customers = Customer::where('status', 'active')->get();
-        if ($customers->count() == 0) {
-            return response()->json(['message' => 'No customers found'], 200);
+        $users = User::all();
+        if ($users->count() == 0) {
+            return response()->json(['message' => 'No users found'], 200);
         }
         else
         {
-            return CostumerResource::collection($customers);
+            return response()->json([
+                'message' => 'Users found',
+                'users' => UserResource::collection($users),
+            ], 200);
 
         }
     }
@@ -41,10 +46,9 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required','string','email','max:255','unique:customers'],
-            'phone' => ['required','string' , 'regex:^(98|97)\d{8}$^', 'unique:customers,phone'],
-            'address' => ['required','string','max:255'],
-            'status' => 'required',
+            'email' => ['required','string','email','max:255','unique:users'],
+            'phone' => ['required','string' , 'regex:^(98|97)\d{8}$^', 'unique:users,phone'],
+            'role' => 'required',
             'password' => ['required','string','min:8'],
         ]);
         if ($validator->fails()) {
@@ -53,36 +57,35 @@ class UserController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         }
-        $customer = Customer::create([
+        $customer = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'address' => $request->address,
-            'status' => $request->status,
+            'role' => $request->role,
             'email_verified_at' => now(),
             'password' => bcrypt($request->password),
         ]);
 
         return response()->json([
-            'message' => 'Customer created successfully',
-            'customer' => new CostumerResource($customer),
+            'message' => 'User created successfully',
+            'users' => new UserResource($customer),
         ], 200);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Customer $user)
+    public function show(User $user)
     {
-        $customer = Customer::where('id', $user->id)->first();
-        if ($customer->count() == 0) {
+        $users = User::where('id', $user->id)->first();
+        if ($users->count() == 0) {
             return response()->json([
-                'message' => 'Customer not found',
+                'message' => 'User not found',
             ], 404);
         }
     return response()->json([
-        'message' => 'Customer found',
-        'customer' => new CostumerResource($customer),
+        'message' => 'User found',
+        'user' => new UserResource($users),
     ], 200);
     }
 
@@ -91,15 +94,15 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        $customer = Customer::find($id);
-        if (!$customer) {
+        $user = User::find($id);
+        if (!$user) {
             return response()->json([
-                'message' => 'Customer not found',
+                'message' => 'User not found',
             ], 404);
         }
         return response()->json([
-            'message' => 'Customer found',
-            'customer' => new CostumerResource($customer),
+            'message' => 'User found',
+            'user' => new UserResource($user),
         ], 200);
     }
 
@@ -111,10 +114,9 @@ class UserController extends Controller
         $validator = Validator::make($request->all(),[
 
             'name' => ['required','string','max:255'],
-            'email'=>['required','string','email','max:255','unique:customers,email,'.$user],
-            'phone'=>['required','string','regex:^(98|97)\d{8}$^','unique:customers,phone,'.$user],
-            'address'=>['required','string','max:255'],
-            'status'=>'required',
+            'email'=>['required','string','email','max:255','unique:users,email,'.$user],
+            'phone'=>['required','string','regex:^(98|97)\d{8}$^','unique:users,phone,'.$user],
+            'role'=>'required',
             'password'=>['required','string','min:8'],
         ]);
         if($validator->fails()){
@@ -123,22 +125,21 @@ class UserController extends Controller
                 'errors'=>$validator->errors(),
             ],422);
         }
-        $customer = Customer::find($user);
-        if (!$customer) {
+        $users = User::find($user);
+        if (!$users) {
             return response()->json([
-                'message' => 'Customer not found',
+                'message' => 'User not found',
             ], 404);
         }
-        $customer->name = $request->name;
-        $customer->email = $request->email;
-        $customer->phone = $request->phone;
-        $customer->address = $request->address;
-        $customer->status = $request->status;
-        $customer->password = bcrypt($request->password);
-        $customer->update();
+        $users->name = $request->name;
+        $users->email = $request->email;
+        $users->phone = $request->phone;
+        $users->role = $request->role;
+        $users->password = bcrypt($request->password);
+        $users->update();
         return response()->json([
-            'message' => 'Customer updated successfully',
-            'customer' => new CostumerResource($customer),
+            'message' => 'User updated successfully',
+            'user' => new UserResource($users),
         ], 200);
     }
 
@@ -147,15 +148,15 @@ class UserController extends Controller
      */
     public function destroy(string $user)
     {
-        $customer = Customer::find($user);
-        if(!$customer){
+        $users = User::find($user);
+        if(!$users){
             return response()->json([
-                'message' => "Customer not found",
+                'message' => "User not found",
             ], 404);
         }
-        $customer->delete();
+        $users->delete();
         return response()->json([
-            'message'=> 'Customer deleted successfully',
+            'message'=> 'User deleted successfully',
         ]);
     }
 }

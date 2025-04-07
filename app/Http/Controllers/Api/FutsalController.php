@@ -12,7 +12,7 @@ class FutsalController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
