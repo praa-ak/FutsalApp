@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Timeslot;
 use Illuminate\Http\Request;
 
 class TimeslotController extends Controller
@@ -12,37 +13,21 @@ class TimeslotController extends Controller
      */
     public function index()
     {
-        //
+        $timeslots = Timeslot::all();
+        if ($timeslots->isEmpty()) {
+            return response()->json([
+                'message' => 'No timeslot found',
+            ], 404);
+        }
+        return response()->json([
+            'message' => 'Timeslots found',
+            'timeslots' => $timeslots,
+        ], 200);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
     {
         //
     }
@@ -55,11 +40,5 @@ class TimeslotController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+
 }
