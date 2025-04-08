@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('phone');
             $table->string('address');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->integer('rate')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('inactive');
             $table->longText('description')->nullable();

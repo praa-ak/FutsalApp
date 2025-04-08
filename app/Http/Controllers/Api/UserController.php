@@ -146,7 +146,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $user)
+    public function destroy(User $user)
     {
         $users = User::find($user);
         if(!$users){
@@ -159,4 +159,5 @@ class UserController extends Controller
             'message'=> 'User deleted successfully',
         ]);
     }
+    
 }

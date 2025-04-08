@@ -9,7 +9,6 @@ class Futsal extends Model
 {
     protected $fillable = [
         'name',
-        'email',
         'phone',
         'address',
         'status',
