@@ -17,13 +17,13 @@ class Reservation extends Model
         'payment_type',
         'payment_screenshot',
         'reservation_code',
-        'customer_id',
+        'user_id',
         'futsal_id',
         'timeslot_id',
     ];
-    public function customer(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(User::class);
     }
     /**
      * Get all of the futsals for the Reservation
@@ -38,5 +38,14 @@ class Reservation extends Model
     public function futsal(): BelongsTo
     {
         return $this->belongsTo(Futsal::class);
+    }
+    /**
+     * Get the timeslot that owns the Reservation
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function timeslot(): BelongsTo
+    {
+        return $this->belongsTo(Timeslot::class,);
     }
 }

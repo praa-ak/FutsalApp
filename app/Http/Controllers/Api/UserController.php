@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CostumerResource;
+
 use App\Http\Resources\UserResource;
-use App\Models\Customer;
+
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -159,5 +159,5 @@ class UserController extends Controller
             'message'=> 'User deleted successfully',
         ]);
     }
-    
+
 }

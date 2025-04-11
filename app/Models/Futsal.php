@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Futsal extends Model
@@ -16,6 +17,7 @@ class Futsal extends Model
         'rate',
         'description',
         'facilities',
+        'user_id',
     ];
     /**
      * Get all of the reservations for the Futsal
@@ -39,6 +41,15 @@ class Futsal extends Model
     public function timeslots(): HasMany
     {
         return $this->hasMany(Timeslot::class);
+    }
+    /**
+     * Get the user that owns the Futsal
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
 }
